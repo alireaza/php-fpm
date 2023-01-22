@@ -1,7 +1,5 @@
 FROM php:8.2.0-fpm-alpine3.17
 
-RUN if [[ -n "$http_proxy" ]] ; then pear config-set http_proxy ${http_proxy}; fi
-
 RUN apk --no-cache --virtual .opcache add --update \
 && NPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1) \
 && docker-php-ext-install -j${NPROC} opcache \
@@ -12,6 +10,7 @@ RUN apk --no-cache --virtual .fcgi add --update \
 && apk del .fcgi
 
 RUN apk --no-cache --virtual .xdebug add --update autoconf build-base linux-headers \
+&& if [[ -n "$http_proxy" ]] ; then pear config-set http_proxy ${http_proxy}; fi \
 && pecl install xdebug-3.2.0 && docker-php-ext-enable xdebug \
 && apk del .xdebug
 
