@@ -1,4 +1,4 @@
-FROM php:8.2.0-fpm-alpine3.17
+FROM php:8.2.3-fpm-alpine3.17
 
 RUN apk --no-cache --virtual .opcache add --update \
 && NPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1) \
@@ -20,7 +20,7 @@ RUN apk --no-cache --virtual .dbgpProxy add --update wget \
 && chmod 755 /usr/bin/dbgpProxy \
 && apk del .dbgpProxy
 
-COPY --from=composer:2.5.1 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.5.4 /usr/bin/composer /usr/bin/composer
 
 COPY conf.d /usr/local/etc/php/conf.d
 
